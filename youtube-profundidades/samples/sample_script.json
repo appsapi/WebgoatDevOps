@@ -1,0 +1,33 @@
+{
+  "topic": "El abismo Challenger, el punto más profundo del océano",
+  "title": "Así es el lugar más profundo de la Tierra: el abismo Challenger",
+  "description": "A casi once kilómetros bajo la superficie del Pacífico se esconde el punto más profundo conocido del océano. En este vídeo bajamos hasta el abismo Challenger, en la fosa de las Marianas, para entender qué presión soporta, quién ha llegado hasta allí y qué vida resiste en la oscuridad total.",
+  "tags": ["abismo Challenger", "fosa de las Marianas", "océano profundo", "zona hadal", "Trieste"],
+  "thumbnail_text": "11 KM BAJO EL MAR",
+  "segments": [
+    {
+      "chapter_title": "Un descenso de once kilómetros",
+      "narration": "Si dejaras caer una piedra sobre la fosa de las Marianas, tardaría más de una hora en tocar el fondo. Allí abajo, a casi once mil metros, está el abismo Challenger: el punto más profundo que conocemos del océano.",
+      "visual_queries": ["ocean surface aerial", "underwater sunlight rays", "deep blue water"]
+    },
+    {
+      "chapter_title": "Donde la luz se rinde",
+      "narration": "La luz del sol apenas llega a los doscientos metros. Por debajo de los mil, la oscuridad es absoluta. Lo único que brilla son los destellos de animales que fabrican su propia luz.",
+      "visual_queries": ["deep sea jellyfish", "bioluminescence", "underwater darkness"]
+    },
+    {
+      "chapter_title": "Una presión aplastante",
+      "narration": "En el fondo, la presión supera mil veces la que sentimos en la superficie. Es como soportar el peso de varios elefantes sobre cada sello de correos de tu piel.",
+      "visual_queries": ["submarine lights", "underwater particles", "deep sea"]
+    },
+    {
+      "chapter_title": "Los primeros en llegar",
+      "narration": "En mil novecientos sesenta, Jacques Piccard y Don Walsh descendieron hasta allí en el batiscafo Trieste. Desde entonces, muy pocas personas han repetido el viaje. ¿Qué crees que nos queda por descubrir ahí abajo? Te leo en los comentarios.",
+      "visual_queries": ["submarine", "ocean exploration", "underwater dark"]
+    }
+  ],
+  "sources": [
+    {"title": "NOAA Ocean Exploration — How deep is the ocean?", "url": "https://oceanexplorer.noaa.gov/facts/ocean-depth.html"},
+    {"title": "NOAA — The Challenger Deep", "url": "https://oceanexplorer.noaa.gov/"}
+  ]
+}

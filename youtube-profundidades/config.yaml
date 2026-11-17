@@ -1,0 +1,52 @@
+# Configuración del canal automatizado sobre las profundidades marinas.
+channel:
+  name: "Abisal"
+  language: "es"
+  tagline: "Historias reales del océano profundo"
+  # Texto que se añade al final de cada descripción.
+  description_footer: |
+    🌊 Abisal: cada semana, un viaje a la parte del planeta que menos conocemos.
+    🔔 Suscríbete para no perderte la próxima inmersión.
+
+    Narración generada con voz sintética. Guion escrito con ayuda de IA a partir de las fuentes citadas.
+
+claude:
+  model: "claude-opus-5-5"
+  research_effort: "medium"
+  script_effort: "high"
+
+formats:
+  long:
+    target_minutes: 8        # duración aproximada de la narración
+    width: 1920
+    height: 1080
+    seconds_per_clip: 6
+  short:
+    target_seconds: 50       # los Shorts deben durar menos de 60 s
+    width: 1080
+    height: 1920
+    seconds_per_clip: 4
+
+voice:
+  provider: "edge"           # "edge" (gratis) o "elevenlabs" (requiere ELEVENLABS_API_KEY)
+  edge_voice: "es-ES-AlvaroNeural"
+  edge_rate: "-5%"
+  elevenlabs_voice_id: ""    # ID de voz si provider = elevenlabs
+  elevenlabs_model: "eleven_multilingual_v2"
+
+video:
+  fps: 30
+  crf: 21
+  burn_subtitles: true
+  music_volume: 0.08         # volumen de la música de fondo (assets/music/*.mp3)
+  pause_between_segments: 0.5
+
+youtube:
+  category_id: "28"          # 28 = Ciencia y tecnología
+  privacy_status: "public"   # public | unlisted | private
+  made_for_kids: false
+  contains_synthetic_media: true   # declaración de contenido sintético de YouTube
+  default_language: "es"
+  playlist_id_long: ""       # opcional: lista donde añadir los vídeos largos
+  playlist_id_short: ""      # opcional: lista para los Shorts
+  base_tags: ["océano", "mar profundo", "fosa de las Marianas", "ciencia", "biología marina", "documental"]

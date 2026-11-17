@@ -1,0 +1,9 @@
+anthropic>=2.9,<3
+edge-tts>=7.3,<8
+requests>=2.32
+pillow>=11
+pydantic>=2.8
+pyyaml>=6
+google-api-python-client>=2.150
+google-auth>=2.35
+google-auth-oauthlib>=1.2
