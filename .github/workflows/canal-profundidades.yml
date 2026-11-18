@@ -1,0 +1,118 @@
+name: Canal Abisal (profundidades marinas)
+
+on:
+  schedule:
+    # Vídeo largo: lunes y jueves a las 16:07 UTC
+    - cron: "7 16 * * 1,4"
+    # Short: martes, miércoles, viernes y sábado a las 17:13 UTC
+    - cron: "13 17 * * 2,3,5,6"
+  workflow_dispatch:
+    inputs:
+      format:
+        description: "Formato del vídeo"
+        type: choice
+        options: [long, short]
+        default: long
+      upload:
+        description: "Subir a YouTube"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: canal-abisal
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        working-directory: youtube-profundidades
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+      ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+      YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+      YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+      YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+    steps:
+      - name: Comprobar secretos
+        id: secrets
+        working-directory: .
+        run: |
+          missing=""
+          for v in ANTHROPIC_API_KEY PEXELS_API_KEY YOUTUBE_CLIENT_ID YOUTUBE_CLIENT_SECRET YOUTUBE_REFRESH_TOKEN; do
+            if [ -z "${!v}" ]; then missing="$missing $v"; fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::warning::Canal en pausa: faltan los secretos$missing. Ejecuta youtube-profundidades/tools/configurar_secretos.sh"
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v5
+        if: steps.secrets.outputs.ok == 'true'
+
+      - uses: actions/setup-python@v6
+        if: steps.secrets.outputs.ok == 'true'
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: youtube-profundidades/requirements.txt
+
+      - name: Instalar ffmpeg y fuentes
+        if: steps.secrets.outputs.ok == 'true'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core
+
+      - name: Instalar dependencias
+        if: steps.secrets.outputs.ok == 'true'
+        run: pip install -r requirements.txt
+
+      - name: Elegir formato
+        if: steps.secrets.outputs.ok == 'true'
+        id: fmt
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "format=${{ inputs.format }}" >> "$GITHUB_OUTPUT"
+            echo "upload=${{ inputs.upload }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "7 16 * * 1,4" ]; then
+            echo "format=long" >> "$GITHUB_OUTPUT"; echo "upload=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "format=short" >> "$GITHUB_OUTPUT"; echo "upload=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generar y publicar vídeo
+        if: steps.secrets.outputs.ok == 'true'
+        run: |
+          ARGS="--format ${{ steps.fmt.outputs.format }}"
+          if [ "${{ steps.fmt.outputs.upload }}" != "true" ]; then ARGS="$ARGS --no-upload"; fi
+          python run.py $ARGS
+
+      - name: Guardar vídeo como artefacto
+        if: always() && steps.secrets.outputs.ok == 'true'
+        uses: actions/upload-artifact@v5
+        with:
+          name: abisal-${{ steps.fmt.outputs.format }}-${{ github.run_id }}
+          path: |
+            youtube-profundidades/output/*/*.mp4
+            youtube-profundidades/output/*/*.jpg
+            youtube-profundidades/output/*/*.json
+            youtube-profundidades/output/*/*.md
+            youtube-profundidades/output/*/*.txt
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Guardar historial de temas
+        if: steps.secrets.outputs.ok == 'true'
+        run: |
+          git config user.name "abisal-bot"
+          git config user.email "abisal-bot@users.noreply.github.com"
+          git add state/history.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Abisal: registrar vídeo publicado"
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
