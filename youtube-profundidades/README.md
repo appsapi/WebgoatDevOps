@@ -61,6 +61,9 @@ Añádelos en el repositorio: **Settings → Secrets and variables → Actions �
 
 ### 3. Primera ejecución
 
+`python tools/check_setup.py` comprueba todas las claves (Claude, Pexels, voz y YouTube) sin publicar
+nada. El workflow «Canal Abisal - prueba» lo ejecuta en GitHub y además genera un Short sin subirlo.
+
 En GitHub: **Actions → Canal Abisal → Run workflow**, con `upload` desactivado para revisar el
 resultado. El vídeo, la miniatura, el guion y las notas quedan como artefacto descargable 7 días.
 Cuando te guste, deja que la programación siga sola.
