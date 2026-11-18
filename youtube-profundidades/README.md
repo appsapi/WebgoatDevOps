@@ -40,6 +40,13 @@ Se cambia en `.github/workflows/canal-profundidades.yml`; la duración y el esti
 | `ELEVENLABS_API_KEY` (opcional) | solo si `voice.provider: elevenlabs` |
 
 Añádelos en el repositorio: **Settings → Secrets and variables → Actions → New repository secret**.
+O, más rápido, cuando tengas las dos claves y el JSON del paso 2, un único comando en tu ordenador
+pide las claves, abre la autorización de YouTube, guarda los cinco secretos y lanza la prueba:
+
+```bash
+gh auth login        # solo la primera vez
+bash youtube-profundidades/tools/configurar_secretos.sh client_secret.json
+```
 
 ### 2. Acceso a YouTube
 
